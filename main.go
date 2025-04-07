@@ -3,6 +3,7 @@ package main
 import (
 	"io"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/mikerybka/twilio"
@@ -27,6 +28,10 @@ func main() {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+	})
+	http.HandleFunc("GET /secrets/email", func(w http.ResponseWriter, r *http.Request) {
+		b, _ := os.ReadFile("/home/mike/data/secrets/email")
+		w.Write(b)
 	})
 	http.ListenAndServe(":2222", nil)
 }
