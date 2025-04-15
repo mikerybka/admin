@@ -4,6 +4,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/mikerybka/twilio"
@@ -29,8 +30,9 @@ func main() {
 			return
 		}
 	})
-	http.HandleFunc("GET /secrets/email", func(w http.ResponseWriter, r *http.Request) {
-		b, _ := os.ReadFile("/home/mike/data/secrets/email")
+	http.HandleFunc("GET /secrets/", func(w http.ResponseWriter, r *http.Request) {
+		path := filepath.Join("/home/mike/data", r.URL.Path)
+		b, _ := os.ReadFile(path)
 		w.Write(b)
 	})
 	http.ListenAndServe(":2222", nil)
