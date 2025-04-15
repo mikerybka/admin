@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "embed"
 	"io"
 	"net/http"
 	"os"
@@ -35,5 +36,11 @@ func main() {
 		b, _ := os.ReadFile(path)
 		w.Write(b)
 	})
+	http.HandleFunc("GET /tv", func(w http.ResponseWriter, r *http.Request) {
+		w.Write(tvHTML)
+	})
 	http.ListenAndServe(":2222", nil)
 }
+
+//go:embed tv.html
+var tvHTML []byte
