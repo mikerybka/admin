@@ -2,11 +2,14 @@ package main
 
 import (
 	_ "embed"
+	"html/template"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/mikerybka/twilio"
 	"github.com/mikerybka/util"
@@ -37,9 +40,18 @@ func main() {
 		w.Write(b)
 	})
 	http.HandleFunc("GET /tv", func(w http.ResponseWriter, r *http.Request) {
-		w.Write(tvHTML)
+		err := template.Must(template.New("tv").Parse(string(tvHTML))).Execute(w, TV{
+			Text: strconv.FormatInt(time.Now().Unix(), 10),
+		})
+		if err != nil {
+			panic(err)
+		}
 	})
 	http.ListenAndServe(":2222", nil)
+}
+
+type TV struct {
+	Text string
 }
 
 //go:embed tv.html
