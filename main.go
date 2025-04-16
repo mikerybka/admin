@@ -7,9 +7,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
-	"time"
 
 	"github.com/mikerybka/twilio"
 	"github.com/mikerybka/util"
@@ -41,7 +39,7 @@ func main() {
 	})
 	http.HandleFunc("GET /tv", func(w http.ResponseWriter, r *http.Request) {
 		err := template.Must(template.New("tv").Parse(string(tvHTML))).Execute(w, TV{
-			Text: strconv.FormatInt(time.Now().Unix(), 10),
+			// Text: strconv.FormatInt(time.Now().Unix(), 10),
 		})
 		if err != nil {
 			panic(err)
